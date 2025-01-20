@@ -3,7 +3,7 @@
 This project is an HR Tech web application designed to simplify the hiring process by enabling CV uploads, extracting candidate information using advanced AI, and managing data efficiently.
 # Hosting:
 1. Frontend on Vercel : `https://quickcvfrontend-git-main-kev0-4s-projects.vercel.app/`
-2. Backend on Render : ` `
+2. Backend on Render : ` ` // localhost renderer not working
 ## Backend Setup
 
 1. Navigate to the `/backend` directory.
