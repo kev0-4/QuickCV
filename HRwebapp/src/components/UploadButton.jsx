@@ -48,6 +48,7 @@ const UploadButton = () => {
   };
 
   return (
+    <div>
     <div className="py-8">
     <div className="flex justify-center items-center flex-col">
       <label className="form-control w-full max-w-xs">
@@ -75,6 +76,7 @@ const UploadButton = () => {
           </div>
         </div>
       )}
+    </div>
     </div>
     </div>
   );

@@ -7,9 +7,11 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Details from "./pages/details";
 import WhyUseUs from "./components/WhyUs";
 import PoweredByGoogleGemini from "./components/PoweredByGoogle";
+import axios from "axios";
 
 function App() {
   const [cvData, setCvData] = useState(null);
+
   const handleFileUpload = async (file) => {
     const formData = new FormData();
     formData.append("file", file);
@@ -25,25 +27,27 @@ function App() {
       console.error("Error uploading CV:", error);
     }
   };
-  return (
 
+  return (
     <Router>
       <NavBar />
-      
       <Routes>
         <Route
           path="/"
           element={
             <>
               <HeroComponent />
-              <PoweredByGoogleGemini /> 
-              <UploadButton onUpload={handleFileUpload} />
-              </>
+              <PoweredByGoogleGemini />
+              <div id="uploadSection" className="py-20 bg-purple">
+                <h2 className="text-3xl font-bold text-center">Upload CV</h2>
+                <UploadButton onUpload={handleFileUpload} />
+              </div>
+            </>
           }
         />
         <Route path="/details" element={<Details />} />
       </Routes>
-      <WhyUseUs></WhyUseUs>
+      <WhyUseUs />
     </Router>
   );
 }
