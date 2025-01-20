@@ -7,3 +7,4 @@ aiohttp
 jose
 cloudflare
 boto3 
+pandas
