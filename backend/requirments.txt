@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+requests
+aiohttp
+jose
+sqlalchemy
+databases
+psycopg2-binary  # Replace with the relevant driver for your database
+cloudflare
+boto3  # For Cloudflare R2 if using S3-compatible API

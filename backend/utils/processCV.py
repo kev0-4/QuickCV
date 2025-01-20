@@ -16,7 +16,6 @@ def parsingCV(pdf_url):
     doc_data = base64.standard_b64encode(
         httpx.get(pdf_url).content).decode("utf-8")
 
-    # Response schema
     generation_config = {
         "temperature": 1,
         "top_p": 0.95,
@@ -43,7 +42,6 @@ def parsingCV(pdf_url):
         generation_config=generation_config,
     )
 
-    # uploading document
     prompt = "Summarize this document"
     response = model.generate_content(
         [{'mime_type': 'application/pdf', 'data': doc_data}, prompt])
