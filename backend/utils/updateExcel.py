@@ -18,6 +18,7 @@ r2_client = boto3.client(
     endpoint_url=R2_ENDPOINT_URL,
     aws_access_key_id=R2_ACCESS_KEY_ID,
     aws_secret_access_key=R2_SECRET_ACCESS_KEY,
+    ChecksumMode='None'
 )
 
 def update_excel(email, first_name, last_name, education, skills, links, cv_link):
