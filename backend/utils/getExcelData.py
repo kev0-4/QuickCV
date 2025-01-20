@@ -16,12 +16,12 @@ r2_client = boto3.client(
     endpoint_url=R2_ENDPOINT_URL,
     aws_access_key_id=R2_ACCESS_KEY_ID,
     aws_secret_access_key=R2_SECRET_ACCESS_KEY,
-    ChecksumMode='None'
+    
 )
 
 def get_excel_data():
     try:
-        file_obj = r2_client.get_object(Bucket=R2_BUCKET_NAME, Key="cv_tracking.xlsx")
+        file_obj = r2_client.get_object(Bucket=R2_BUCKET_NAME, Key="cv_tracking.xlsx",ChecksumMode='None')
         file_content = file_obj["Body"].read()
         df = pd.read_excel(BytesIO(file_content))
         data = df.to_dict(orient="records")
