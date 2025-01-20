@@ -24,7 +24,7 @@ r2_client = boto3.client(
 def update_excel(email, first_name, last_name, education, skills, links, cv_link):
     try:
         # Get the existing Excel file from R2
-        file_obj = r2_client.get_object(Bucket=R2_BUCKET_NAME, Key="cv_tracking.xlsx")
+        file_obj = r2_client.get_object(Bucket=R2_BUCKET_NAME, Key="cv_tracking.xlsx",ChecksumMode='None')
         file_content = file_obj["Body"].read()
 
         # Load it into a pandas DataFrame
@@ -61,6 +61,7 @@ def update_excel(email, first_name, last_name, education, skills, links, cv_link
         Key="cv_tracking.xlsx",
         Body=output,
         ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        
     )
 
     return {"message": "Excel file updated successfully!"}
