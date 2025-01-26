@@ -25,7 +25,7 @@ const UploadButton = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/upload_cv",
+        "https://quickcv.onrender.com/api/upload_cv",
         formData,
         {
           headers: {

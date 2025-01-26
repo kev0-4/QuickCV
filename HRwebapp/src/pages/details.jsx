@@ -9,7 +9,7 @@ const Details = () => {
   useEffect(() => {
     const fetchDetails = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/get_details");
+        const response = await axios.get("https://quickcv.onrender.com/api/get_details");
         setCvData(response.data.data);
         setLoading(false);
       } catch (err) {
