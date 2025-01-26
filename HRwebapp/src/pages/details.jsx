@@ -42,7 +42,8 @@ const Details = () => {
               <p><strong>Education:</strong> {candidate.education}</p>
               <p><strong>Skills:</strong> {candidate.skills}</p>
               <p><strong>Links:</strong> {candidate.links}</p>
-              <p><strong>CV Link:</strong> <a href={candidate.cvLink} target="_blank" rel="noopener noreferrer">View CV</a></p>
+              <p><strong>CV Link:</strong> <a href={candidate.cvLink} target="_blank" rel="noopener noreferrer">{candidate.cvLink}</a></p>
+              
             </div>
           </div>
         ))}
