@@ -32,7 +32,7 @@ This project is an HR Tech web application designed to simplify the hiring proce
 
 1. Navigate to the `/HRwebapp` directory.
 2. Install the dependencies: `npm install`
-3. Change your backend url in 'App.jsx', 'UploadButton.jsx', 'details.jsx'
+3. Change your backend url in `App.jsx`, `UploadButton.jsx`, `details.jsx`
 3. Start the development server: `npm run dev`
 
 ## Database
