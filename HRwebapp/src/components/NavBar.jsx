@@ -14,6 +14,10 @@ const NavBar = () => {
       <Link to="/details">
         <button className="btn btn-primary ml-6">View Details</button>
       </Link>
+      <Link to="/jdpage">
+      <button className="btn btn-primary ml-6">JD/ATS/Compatibility</button>
+
+      </Link>
     </div>
   );
 };

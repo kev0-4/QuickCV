@@ -8,6 +8,7 @@ import Details from "./pages/details";
 import WhyUseUs from "./components/WhyUs";
 import PoweredByGoogleGemini from "./components/PoweredByGoogle";
 import axios from "axios";
+import JdPage from "./pages/jdPage";
 
 function App() {
   const [cvData, setCvData] = useState(null);
@@ -46,6 +47,7 @@ function App() {
           }
         />
         <Route path="/details" element={<Details />} />
+        <Route path="/jdPage" element={<JdPage />} />
       </Routes>
       <WhyUseUs />
     </Router>
