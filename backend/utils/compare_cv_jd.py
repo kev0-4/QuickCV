@@ -17,6 +17,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
+
 def encode_pdf_from_url(url: str) -> Optional[str]:
     """Encode PDF from URL to base64 with improved error handling"""
     try:
@@ -30,17 +31,18 @@ def encode_pdf_from_url(url: str) -> Optional[str]:
         logger.error(f"Unexpected error encoding PDF: {str(e)}")
     return None
 
+
 async def handle_cv_upload(file: UploadFile) -> Tuple[Optional[str], Optional[str]]:
     """Handle CV file upload with better resource management"""
     try:
         email = file.filename.split('.')[0]
         temp_path = f"./temp_cv_{email}.pdf"
-        
+
         try:
             # Write file contents
             with open(temp_path, "wb") as f:
                 f.write(await file.read())
-            
+
             # Upload to R2
             r2_url = upload_to_r2(temp_path, f"{email}.pdf")
             return email, r2_url
@@ -48,31 +50,33 @@ async def handle_cv_upload(file: UploadFile) -> Tuple[Optional[str], Optional[st
             # Clean up temp file
             if os.path.exists(temp_path):
                 os.remove(temp_path)
-                
+
     except Exception as e:
         logger.error(f"CV upload failed: {str(e)}", exc_info=True)
         return None, None
+
 
 async def handle_jd_upload(file: UploadFile) -> Optional[str]:
     """Handle JD file upload with better resource management"""
     try:
         temp_path = f"./temp_jd_{file.filename}"
-        
+
         try:
             # Write file contents
             with open(temp_path, "wb") as f:
                 f.write(await file.read())
-            
+
             # Upload to R2
             return upload_jd_to_r2(temp_path)
         finally:
             # Clean up temp file
             if os.path.exists(temp_path):
                 os.remove(temp_path)
-                
+
     except Exception as e:
         logger.error(f"JD upload failed: {str(e)}", exc_info=True)
         return None
+
 
 async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
     """
@@ -83,7 +87,7 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
         api_key = os.getenv("GOOGLE_API_KEY")
         if not api_key:
             raise ValueError("GOOGLE_API_KEY environment variable not set")
-        
+
         genai.configure(api_key=api_key)
 
         # Encode PDFs with timeout
@@ -113,11 +117,87 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
         - keyword_analysis
         - additional_analysis (certifications, cultural fit)
         - improvement_suggestions (actionable recommendations)
+        Give Input in this exact format only
+        {
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "ats_score": {
+      "type": "number",
+      "description": "Overall compatibility score (0-100)"
+    },
+    "skills_analysis": {
+      "type": "object",
+      "properties": {
+        "matched": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "missing": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "bonus": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["matched", "missing", "bonus"]
+    },
+    "education_analysis": {
+      "type": "object",
+      "properties": {
+        "degree": { "type": "string" },
+        "relevance": { "type": "string" }
+      },
+      "required": ["degree", "relevance"]
+    },
+    "experience_analysis": {
+      "type": "object",
+      "properties": {
+        "years": { "type": "string" },
+        "level": { "type": "string" },
+        "details": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "domain_relevance": { "type": "string" },
+        "role_alignment": { "type": "string" }
+      },
+      "required": ["years", "level"]
+    },
+    "keyword_analysis": {
+      "type": "object",
+      "properties": {
+        "present": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "missing": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["present", "missing"]
+    },
+    "improvement_suggestions": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "summary": { "type": "string" }
+  },
+  "required": [
+    "ats_score",
+    "skills_analysis",
+    "education_analysis",
+    "experience_analysis"
+  ]
+}
         """
 
         # Use the latest model with better JSON handling
         model = genai.GenerativeModel('gemini-2.0-flash')
-        
+
         # Generate content with appropriate configuration
         response = model.generate_content(
             [
@@ -134,11 +214,11 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
 
         # Parse and validate the response
         result = json.loads(response.text)
-        
+
         # Basic validation of response structure
         if not isinstance(result, dict) or "ats_score" not in result:
             raise ValueError("Unexpected response format from Gemini API")
-        
+
         logger.info("Successfully compared CV and JD")
         return result
 
@@ -148,6 +228,7 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
     except Exception as e:
         logger.error(f"Error during comparison: {str(e)}", exc_info=True)
         return {"error": str(e)}
+
 
 async def process_cv_jd(
     cv_file: Optional[UploadFile] = None,
@@ -161,13 +242,13 @@ async def process_cv_jd(
     """
     try:
         email = None
-        
+
         # Process CV input
         if cv_file and not cv_url:
             email, cv_url = await handle_cv_upload(cv_file)
             if not cv_url:
                 raise ValueError("Failed to process CV file")
-        
+
         # Process JD input
         if jd_file and not jd_url:
             jd_url = await handle_jd_upload(jd_file)
@@ -187,14 +268,14 @@ async def process_cv_jd(
 
         # Perform the comparison
         result = await compare_cv_and_jd(cv_url, jd_url)
-        
+
         # Add metadata to the result
         if isinstance(result, dict):
             result["metadata"] = {
                 "cv_source": "upload" if cv_file else "url",
                 "jd_source": "upload" if jd_file else "url",
             }
-        
+
         return result
 
     except ValueError as e:
