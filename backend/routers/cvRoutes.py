@@ -107,7 +107,7 @@ async def compare_cv_jd_route(
         # Process comparison
         from utils.compare_cv_jd import process_cv_jd
         result = await process_cv_jd(cv_url=cv_url, jd_url=jd_url)
-
+        print(result)
         print("Comparison completed")  # Debug print
 
         # Clean up temp files
