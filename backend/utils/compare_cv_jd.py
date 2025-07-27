@@ -207,7 +207,7 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
             ],
             generation_config={
                 "temperature": 0.3,  # More deterministic output
-                "max_output_tokens": 4000,
+                "max_output_tokens": 8000,
                 "response_mime_type": "application/json"
             }
         )
