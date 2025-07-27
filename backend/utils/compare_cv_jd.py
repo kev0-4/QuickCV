@@ -196,7 +196,7 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
         """
 
         # Use the latest model with better JSON handling
-        model = genai.GenerativeModel('gemini-2.0-flash')
+        model = genai.GenerativeModel('gemini-2.5-flash')
 
         # Generate content with appropriate configuration
         response = model.generate_content(
