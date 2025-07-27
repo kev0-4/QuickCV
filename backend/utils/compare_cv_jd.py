@@ -211,10 +211,14 @@ async def compare_cv_and_jd(cv_url: str, jd_url: str) -> Dict[str, Any]:
                 "response_mime_type": "application/json"
             }
         )
-
+        print("----------------------")
+        print(response)
+        print("-------------------------")
         # Parse and validate the response
         result = json.loads(response.text)
-
+        print("-------------------------")
+        print(result)
+        print("-------------------")
         # Basic validation of response structure
         if not isinstance(result, dict) or "ats_score" not in result:
             raise ValueError("Unexpected response format from Gemini API")
